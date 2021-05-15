@@ -7,6 +7,17 @@ import tensorflow as tf
 import tensorflow.compat.v2.feature_column as fc
 
 
+def make_input_fn(data_df, label_df, num_epochs=10, shuffle=True, batch_size=32):
+    #epochs(quantas vezes verei o codigo)/batch(tamanho do foton de dados)/data(x)/label(y)
+    def input_function():   #tranforma o retorno em uma função
+        ds = tf.data.Dataset.from_tensor_slices((dict(x_train), y_train))#preparando o tensor treino
+        if shuffle:
+            ds = ds.shuffle(1000)#embaralha os dados
+        ds = ds.batch(batch_size).repeat(num_epochs)#treina varias vezes
+        return ds
+    return input_function
+
+
 x_train = pd.read_csv(r'C:\Users\vinis\Downloads\train.csv')
 x_test = pd.read_csv(r'C:\Users\vinis\Downloads\eval.csv')
 
@@ -36,3 +47,5 @@ for item in categorical_column:
 for item in numeric_column:
     feature_list.append(tf.feature_column.numeric_column(item, dtype=tf.float32))#add os valores numaricos
 print(feature_list)
+
+#Treinando modelo:
