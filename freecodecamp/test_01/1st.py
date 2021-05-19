@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow.compat.v2.feature_column as fc
+import os
 
 
 def make_input_fn(data_df, label_df, num_epochs=10, shuffle=True, batch_size=32):
@@ -33,8 +34,6 @@ y_test = x_test.pop('survived')
 
 pd.concat([x_train, y_train], axis=1).groupby('sex').survived.mean().plot(kind='barh').set_xlabel('% survived')
 #plt.show()#porcentagem de sobreviventes por sexo
-print(x_train.info())
-print(y_train)
 
 #Transformando categorias em numeros:
 feature_list = []
@@ -46,8 +45,13 @@ for item in categorical_column:
      #gera uma lista com os valores unicos de cada item e add eles
 for item in numeric_column:
     feature_list.append(tf.feature_column.numeric_column(item, dtype=tf.float32))#add os valores numaricos
-print(feature_list)
+
 
 #Treinando modelo:
-print('a')
-    
+train_input_data = make_input_fn(x_train, y_train)
+test_input_data = make_input_fn(x_test, y_test, num_epochs=1, shuffle=False)
+linear_est = tf.estimator.LinearClassifier(feature_columns=feature_list)
+linear_est.train(train_input_data) #treina
+result = linear_est.evaluate(test_input_data)#testa
+os.system('cls')
+print(result)    
