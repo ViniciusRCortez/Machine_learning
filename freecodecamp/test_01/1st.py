@@ -55,3 +55,5 @@ linear_est.train(train_input_data) #treina
 result = linear_est.evaluate(test_input_data)#testa
 os.system('cls')
 print(result)    
+#Para prever:
+result = linear_est.predict('POR AQUI UMA LINHA INTEIRA DE DADOS')
