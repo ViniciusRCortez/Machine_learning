@@ -49,3 +49,5 @@ for item in numeric_column:
 print(feature_list)
 
 #Treinando modelo:
+print('a')
+    
